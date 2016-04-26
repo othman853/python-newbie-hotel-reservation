@@ -13,18 +13,16 @@ def print_file(file):
     for line in file:
 
         # Using match() instead of search() to get the pattern at index 0
-        if customer_type_pattern.match(line.lower()):
+        if not customer_type_pattern.match(line.lower()):
+            print 'Entry at line %d is invalid' % line_number
 
+        else:
             # Using findall to match same pattern multiple times
             # on a same string
             dates = reservation_date_pattern.findall(line)
 
             if dates:
                 print dates
-
-            # print "%d - %s" % (line_number,  line)
-        else:
-            print 'Invalid entry'
 
         line_number = line_number + 1
 
