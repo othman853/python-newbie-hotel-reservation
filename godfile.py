@@ -17,7 +17,6 @@ ridgewood_weekday_regular_price = {'customer_type': 'regular', 'weekend': False,
 ridgewood_weekend_rewards_price = {'customer_type': 'rewards', 'weekend': True, 'value': 40}
 ridgewood_weekday_rewards_price = {'customer_type': 'rewards', 'weekend': False, 'value': 100}
 
-
 lakewood_prices = [lakewood_weekend_regular_price, lakewood_weekday_regular_price, lakewood_weekend_rewards_price, lakewood_weekday_rewards_price]
 bridgewood_prices = [bridgewood_weekend_regular_price, bridgewood_weekday_regular_price, bridgewood_weekend_rewards_price, bridgewood_weekday_rewards_price]
 ridgewood_prices = [ridgewood_weekend_regular_price, ridgewood_weekday_regular_price, ridgewood_weekend_rewards_price, ridgewood_weekday_rewards_price]
@@ -27,10 +26,6 @@ bridgewood = {"name": "Bridgewood", "rating": 4 , "prices": bridgewood_prices}
 ridgewood = {"name": "Ridgewood", "rating": 5, "prices": ridgewood_prices}
 
 hotels = [lakewood, bridgewood, ridgewood]
-
-# ridgewood = {name: 'Ridgewood', prices: [{}, {}, {}, {}]}
-
-# hotels = [bridgewood, ridgewood]
 
 # Compiling a Regex using the raw string python notation (with the preceding r)
 # By now, the regex accepts anything
@@ -51,16 +46,32 @@ def print_file(file):
             # Using findall to match same pattern multiple times
             # on a same string
             dates = reservation_date_pattern.findall(line)
-            print customer_type
-            print dates
+
+            cheapest_hotel = classify(customer_type, dates)
 
         else:
             print 'Entry at line %d is invalid' % line_number
         line_number = line_number + 1
 
 def classify(customer_type, dates):
-    pass
+    for hotel in hotels:
+        hotel_prices = hotel['prices']
+        prices_for_customer_type = [price for price in hotel_prices if price['customer_type'] == customer_type]
 
+        prices_for_day_type = []
+        for date in dates:
+            prices_for_day_type.extend([price for price in prices_for_customer_type if price['weekend'] == is_weekend(date)])
+
+        print prices_for_day_type
+
+        total_hotel_price = 0
+        for price in prices_for_day_type:
+            total_hotel_price = total_hotel_price + price['value']
+
+        print total_hotel_price
+
+def is_weekend(date):
+    return True
 
 entry_file = open('entries_sample')
 print_file(entry_file)
