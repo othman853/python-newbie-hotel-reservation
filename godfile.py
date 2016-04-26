@@ -3,15 +3,19 @@ import re as regex
 
 # Compiling a Regex using the raw string python notation (with the preceding r)
 # By now, the regex accepts anything
-reservation_pattern = regex.compile(r'.')
+customer_type_pattern = regex.compile(r're(gular|wards)')
 
-def format_line(line_number, line):
-    return
 
 def print_file(file):
     line_number = 1
     for line in file:
-        print "%d - %s" % (line_number,  line)
+
+        # Using match() instead of search() to get the pattern at index 0
+        if customer_type_pattern.match(line.lower()):
+            print "%d - %s" % (line_number,  line)
+        else:
+            print 'Invalid entry'
+
         line_number = line_number + 1
 
 entry_file = open('entries_sample')
