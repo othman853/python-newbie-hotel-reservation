@@ -5,6 +5,8 @@ import re as regex
 # By now, the regex accepts anything
 customer_type_pattern = regex.compile(r're(gular|wards)')
 
+#Sample: 16Mar2009(mon), 17Apr2010(mon) ...
+reservation_date_pattern = regex.compile(r'\d{2}\w{3}\d{4}')
 
 def print_file(file):
     line_number = 1
@@ -12,7 +14,15 @@ def print_file(file):
 
         # Using match() instead of search() to get the pattern at index 0
         if customer_type_pattern.match(line.lower()):
-            print "%d - %s" % (line_number,  line)
+
+            # Using findall to match same pattern multiple times
+            # on a same string
+            dates = reservation_date_pattern.findall(line)
+
+            if dates:
+                print dates
+
+            # print "%d - %s" % (line_number,  line)
         else:
             print 'Invalid entry'
 
