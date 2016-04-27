@@ -54,24 +54,28 @@ def print_file(file):
         line_number = line_number + 1
 
 def classify(customer_type, dates):
+
     for hotel in hotels:
-        hotel_prices = hotel['prices']
-        prices_for_customer_type = [price for price in hotel_prices if price['customer_type'] == customer_type]
 
-        prices_for_day_type = []
-        for date in dates:
-            prices_for_day_type.extend([price for price in prices_for_customer_type if price['weekend'] == is_weekend(date)])
+        hotel_price = calculate_hotel_price_for_reservation(hotel, customer_type, dates)
 
-        print prices_for_day_type
+        print hotel_price
 
-        total_hotel_price = 0
-        for price in prices_for_day_type:
-            total_hotel_price = total_hotel_price + price['value']
+def calculate_hotel_price_for_reservation(hotel, customer_type, dates):
+    hotel_prices = hotel['prices']
+    prices_for_customer_type = [price for price in hotel_prices if price['customer_type'] == customer_type]
 
-        print total_hotel_price
+    date_prices = []
+    for date in dates:
+        price = filter(lambda p: p['weekend'] == is_weekend(date), prices_for_customer_type)
+        date_prices.append(price[0]['value'])
+
+    return sum(date_prices)
+
 
 def is_weekend(date):
     return True
+
 
 entry_file = open('entries_sample')
 print_file(entry_file)
