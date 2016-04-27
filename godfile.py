@@ -1,5 +1,6 @@
 # This is a god file, no OO, no organization, no tests, just code.
 import re as regex
+from datetime import date as native_date
 
 # Hardcoding data
 lakewood_weekend_regular_price = {'customer_type': 'regular', 'weekend': True, 'value': 90}
@@ -27,39 +28,40 @@ ridgewood = {"name": "Ridgewood", "rating": 5, "prices": ridgewood_prices}
 
 hotels = [lakewood, bridgewood, ridgewood]
 
-# Compiling a Regex using the raw string python notation (with the preceding r)
-# By now, the regex accepts anything
 customer_type_pattern = regex.compile(r're(gular|wards)')
 
-#Sample: 16Mar2009(mon), 17Apr2010(mon) ...
 reservation_date_pattern = regex.compile(r'\d{2}\w{3}\d{4}')
 
 def print_file(file):
     line_number = 1
     for line in file:
 
-        # Using match() instead of search() to get the pattern at index 0
         if customer_type_pattern.match(line.lower()) and reservation_date_pattern.findall(line):
 
             customer_type = customer_type_pattern.match(line.lower()).group(0)
-
-            # Using findall to match same pattern multiple times
-            # on a same string
             dates = reservation_date_pattern.findall(line)
 
             cheapest_hotel = classify(customer_type, dates)
+
+            print cheapest_hotel
 
         else:
             print 'Entry at line %d is invalid' % line_number
         line_number = line_number + 1
 
 def classify(customer_type, dates):
+    cheapest_hotel_name = None
+    cheapest_hotel_price = None
 
     for hotel in hotels:
+        current_hotel_name, current_hotel_price = calculate_hotel_price_for_reservation(hotel, customer_type, dates)
 
-        hotel_price = calculate_hotel_price_for_reservation(hotel, customer_type, dates)
+        if cheapest_hotel_price == None or cheapest_hotel_price > current_hotel_price:
+            cheapest_hotel_name = current_hotel_name
+            cheapest_hotel_price = current_hotel_price
 
-        print hotel_price
+    return cheapest_hotel_name
+
 
 def calculate_hotel_price_for_reservation(hotel, customer_type, dates):
     hotel_prices = hotel['prices']
@@ -70,11 +72,21 @@ def calculate_hotel_price_for_reservation(hotel, customer_type, dates):
         price = filter(lambda p: p['weekend'] == is_weekend(date), prices_for_customer_type)
         date_prices.append(price[0]['value'])
 
-    return sum(date_prices)
+    return hotel['name'], sum(date_prices)
 
 
 def is_weekend(date):
-    return True
+
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+    day = int(date[0:2])
+    month = date[2:5]
+    month_number = months.index(month)
+    year = int(date[5:9])
+
+    to_date = native_date(year, month_number, day)
+
+    return to_date.weekday() > 4
 
 
 entry_file = open('entries_sample')
