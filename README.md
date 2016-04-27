@@ -4,7 +4,7 @@ A newbie attempt of solving Hotel Reservation problem in Python.
 
 Exclusively for learning purposes.
 
-For now, trying to get familiar with Python syntax, writing simple, procedural code on `godfile.py`
+For now, trying to get familiar with Python syntax, writing simple, procedural code on `godfile.py` no patterns nor good practices, just some messy code. 
 
 Furthermore: 
   - Apply minimal OO
