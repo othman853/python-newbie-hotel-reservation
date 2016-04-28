@@ -1,4 +1,4 @@
-import patterns
+import model.patterns as patterns
 import re as regex
 
 customer_pattern = regex.compile(patterns.CUSTOMER_TYPE)

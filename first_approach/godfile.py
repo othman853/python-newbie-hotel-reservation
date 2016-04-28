@@ -89,5 +89,5 @@ def is_weekend(date):
     return to_date.weekday() > 4
 
 
-entry_file = open('entries_sample')
+entry_file = open('../entries_sample')
 print_file(entry_file)

@@ -1,8 +1,8 @@
-import patterns
+import model.patterns as patterns
 import re as regex
 from datetime import date as py_date
 
-from reservation import Reservation
+from model.reservation import Reservation
 
 def create_reservation_from_file_entry(file_entry):
     customer_type = regex.compile(patterns.CUSTOMER_TYPE).match(file_entry.lower()).group(0)
