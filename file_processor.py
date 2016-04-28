@@ -3,6 +3,7 @@ class FileProcessor:
     def __init__(self, file_path):
         self.file_path = file_path
 
-    def lines(self):
+    def filtered_lines(self, filter_function):
         with open(self.file_path) as a_file:
-            return a_file.readlines()
+            unfiltered_lines = a_file.readlines()
+            return filter(filter_function, unfiltered_lines)

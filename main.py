@@ -1,14 +1,7 @@
 import re as regex
+from filters import check_reservation_file_entry as is_reservation_valid
 from file_processor import FileProcessor
-
-def validate_line(line) :
-    customer_type_pattern = regex.compile(r're(gular|wards)')
-    return True
 
 processor = FileProcessor('entries_sample')
 
-lines = processor.lines()
-
-valid_lines = filter(validate_line, lines )
-
-print valid_lines
+print processor.filtered_lines(is_reservation_valid)
